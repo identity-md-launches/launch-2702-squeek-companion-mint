@@ -220,6 +220,7 @@ main:focus {
 }
 
 .brand img {
+  flex: none;
   border-radius: 6px;
 }
 
@@ -246,19 +247,25 @@ main:focus {
   margin-inline-start: auto;
 }
 
-.nav + .btn,
-.nav + .account {
-  margin-inline-start: 0;
+@media (max-width: 51.99rem) {
+  .top {
+    flex-wrap: wrap;
+  }
 }
 
 @media (min-width: 52rem) {
   .nav {
     display: flex;
   }
+  .nav + .btn,
+  .nav + .account {
+    margin-inline-start: 0;
+  }
 }
 
 .account {
   display: flex;
+  max-width: 100%;
   gap: var(--space-2);
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -446,7 +453,7 @@ main:focus {
   gap: var(--space-6);
 }
 
-@media (min-width: 30rem) and (max-width: 55.99rem) {
+@media (min-width: 34rem) and (max-width: 55.99rem) {
   .live {
     grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
     align-items: start;
@@ -482,7 +489,8 @@ main:focus {
 
 .facts {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, auto));
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
   gap: var(--space-4) var(--space-6);
   margin: 0;
 }

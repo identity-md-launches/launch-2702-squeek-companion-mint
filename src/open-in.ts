@@ -8,8 +8,6 @@ export const OPEN_IN: ReadonlyArray<{ id: string; name: string; href: (url: stri
   { id: "metamask", name: "MetaMask", href: (url) => `https://link.metamask.io/dapp/${url.replace(/^https?:\/\//, "")}` },
   // https://docs.cdp.coinbase.com/wallet-sdk/docs/deep-link
   { id: "coinbase", name: "Coinbase Wallet", href: (url) => `https://go.cb-w.com/dapp?cb_url=${encodeURIComponent(url)}` },
-  // Rabby documents no open-in-browser link; the row falls back to Rabby's landing page.
-  { id: "rabby", name: "Rabby", href: () => "https://rabby.io/" },
   // https://docs.phantom.com/phantom-deeplinks/other-methods/browse
   {
     id: "phantom",

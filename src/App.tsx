@@ -94,9 +94,11 @@ function MintPanel() {
   const soldOut = minted !== undefined && minted >= PUBLIC_SUPPLY;
   const wrongChain = isConnected && chainId !== chain.id;
   const busy = status.kind === "confirm" || status.kind === "pending";
+  const checkingClaim = claimed.isPending || claimed.isFetching;
 
   async function mint() {
     if (!address || !client) return;
+    if (checkingClaim || claimed.isError || claimed.data === undefined) return;
     // A claimed wallet is told so before anything reaches the wallet.
     if (claimed.data === true) {
       setStatus({ kind: "error", message: ALREADY_MINTED });
@@ -139,16 +141,25 @@ function MintPanel() {
         {switching ? "Switching…" : "Switch to Sepolia"}
       </button>
     );
+  } else if (claimed.isError && !claimed.isFetching && !soldOut) {
+    note = "Unable to check this wallet's claim. Try again.";
+    action = (
+      <button type="button" className="btn btn-primary btn-wide" disabled={busy} onClick={() => void claimed.refetch()}>
+        Try again
+      </button>
+    );
   } else {
     note = soldOut
       ? "All 900 public companions have been minted."
-      : claimed.isPending
+      : checkingClaim
         ? "Checking this wallet's claim…"
-        : claimed.data
+        : claimed.data === true
           ? "This wallet has used its one claim."
-          : "This wallet can claim one companion. Minting is free; you pay only Sepolia gas.";
+          : claimed.data === false
+            ? "This wallet can claim one companion. Minting is free; you pay only Sepolia gas."
+            : "Checking this wallet's claim…";
     action = (
-      <button type="button" className="btn btn-primary btn-wide" disabled={busy || soldOut} onClick={mint}>
+      <button type="button" className="btn btn-primary btn-wide" disabled={busy || soldOut || checkingClaim || claimed.isError || claimed.data === undefined} onClick={mint}>
         {status.kind === "confirm" ? "Confirm in your wallet…" : status.kind === "pending" ? "Minting…" : "Mint companion"}
       </button>
     );
